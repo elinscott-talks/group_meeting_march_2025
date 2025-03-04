@@ -219,26 +219,7 @@
 /// - body (auto): is the body of the section. This will be passed automatically by Touying.
 #let new-section-slide(config: (:), level: 1, numbered: true, body) = touying-slide-wrapper(self => {
 
-  // self = utils.empty-page(self, margin: 2em)
-  // let slide-body = {
-  //   set align(horizon)
-  //   set text(size: 1.5em, fill: self.colors.neutral-lightest, weight: "bold")
-  //   pad(states.current-section-with-numbering(self))
-  // }
-
-  // let footer(self) = {
-  //   block(
-  //     inset: 2em,
-  //     width: 100%,
-  //     text(
-  //       fill: self.colors.neutral-lightest,
-  //       utils.call-or-display(self, self.store.footer),
-  //     ),
-  //   )
-  // }
-
   let header(self) = default-header(self, black-logo: false)
-
   let footer(self) = default-footer(self, fill: self.colors.neutral-lightest)
 
   self = utils.merge-dicts(
@@ -251,6 +232,7 @@
   let slide-body = {
     set std.align(horizon + left)
     text(fill: self.colors.neutral-lightest, weight: "bold", size: 1.5em, utils.display-current-heading(numbered: numbered))
+    body
   }
   touying-slide(self: self, config: config, slide-body)
 })
@@ -371,7 +353,10 @@
   body,
 ) = {
 
-  set text(font: "arial")
+  set text(font: "arial", size: 20pt)
+  set bibliography(title: none, style: "nature-footnote.csl")
+  show footnote.entry: set text(size: 0.6em, fill: rgb("#888888"))
+  set footnote.entry(separator: none, indent: 0em)
 
   let primary = rgb("#dc005a")
   let secondary = rgb("#f0f500")
