@@ -10,8 +10,8 @@
 #show: psi-theme.with(aspect-ratio: "16-9",
                       color-scheme: "pink-yellow",
                              config-info(
-                                title: [Writing workflows],
-                                subtitle: [An outsider's perspective],
+                                title: [Automated workflows],
+                                subtitle: [What I have learned from writing `koopmans`],
                                 author: [Edward Linscott],
                                 date: datetime(year: 2025, month: 3, day: 12),
                                 location: [LMS Seminar],
@@ -41,27 +41,31 @@
 // #let (slide, empty-slide, title-slide, new-section-slide, focus-slide, matrix-slide) = utils.slides(s)
 // #show: slides
 
-#title-slide()
+// #title-slide()
 
 == Outline
-#image("abe_simpson.jpg")
 What I've learned after 5 years of trying to automate Koopmans functionals
-https://knowyourmeme.com/memes/abe-simpson-talking-to-kids
+
+== A brief history of the `koopmans` code
+#slide()[
+#set text(size: 0.8em)
+#pause
+- I arrived in THEOS in 2019, started learning how to run Koopmans functionals -- and it was painful! #pause
+- I was familiar with ASE so wrote some simple scripts #pause
+- decided this was something we wanted for everyone #pause
+- (and having been advised not to use AiiDA...) #pause
+- implemented `kcp.x` support in `ASE` #pause
+- implemented a Koopmans ΔSCF workflow for molecules #pause
+- DFT, Wannierize, etc -- we want reusable subworkflows #pause
+- start to add tests, documentation, etc. and you have `koopmans`
+- more recently, massive changes to integrate with `AiiDA` (I'll discuss this later)
+#pause
+... but what have I learned throughout this process?
+]
+
+#focus-slide(background-img: "abe_simposon")[]
 
 Well not quite --- but the intervening years have not been kind -- see permit photos)
-
-== History of koopmans
-- I want to run Koopmans functional calculations and I know how to write python and use ASE (and I was advised not to use AiiDA...)
-- atoms
-- calculators
-- where necessary, use outputs of previous calculation into subsequent calculation (e.g. link a file, set a parameter etc.)
-- start writing multiple scripts
-- wannierisation
-- dscf
-- dfpt
-- natural emergence of the idea of a workflow and subworkflows that I want to be able to reuse
-...
-koopmans
 
 == Interfacing with AiiDA
 
@@ -71,8 +75,7 @@ What I needed to do
 
 = Common Workflow Language
 
-
-== 
+== Basic Concepts of CWL
 
 #image("cwl/cwl_logo.png", height: 50%)
 
@@ -81,8 +84,6 @@ What I needed to do
 - introduced in 2014; version 1.2 released in 2020 #pause
 - mostly used by bioinformatics community
 
-
-== Basic Concepts
 #slide(self => [
   #cetz-canvas({
     import cetz.draw: *
@@ -107,11 +108,10 @@ What I needed to do
     content((9, 0), "Workflow", name: "w")
     line("w", "p")
   })
-
-
 ])
 
 == CommandLineTool
+#slide()[
 #show raw: it => [
   #set text(size: 0.8em)
   #it
@@ -119,7 +119,8 @@ What I needed to do
 `echo.cwl`
 
 #raw(read("cwl/hello_world.cwl"), lang: "yaml")
-
+]
+  
 == ExpressionTool
 `uppercase.cwl`
 
@@ -131,79 +132,58 @@ What I needed to do
 #raw(read("cwl/echo_uppercase.cwl"), lang: "yaml")
 
 == Pros and Cons
-#show raw: it => [
-  #set text(size: 1.25em)
-  #it
-]
 
+#slide()[
+#set text(size: 0.8em)
 - pros: #pause
-  - clear and explicit #pause
-  - composable and customisable #pause
+  - explicit #pause
+  - composable #pause
+  - customisable #pause
 - cons: #pause
-  - verbose #pause
-  - complicated workflows lead to very complicated CWL (e.g. `while`) #pause
+  - verbose with lots of boilerplate
+  - complicated workflows become very complicated CWL (e.g. `while`) #pause
   - `ExpressionTool` restricted to Javascript #pause
-  - need to define custom types (e.g. OPTIMADE, PREMISE) #pause
+  - need to define custom types (see e.g. OPTIMADE, PREMISE) #pause
   - custom types do not permit defaults #pause
-  - rigorous schemas require willingness from the community #pause
+  - rigorous schemas require willingness from the community
+  
+]
 
-==
-#image("cwl/qe_issue.png", width: 100%)
-==
+== ... willingness from the community?
+#image("cwl/qe_issue.png", height: 100%)
+
 #image("cwl/qe_issue_2.png", width: 100%)
-
-
-= So where does that leave koopmans?
-== Rewriting `koopmans`
-`koopmans` is slowly being refactored into "CWL-inspired" python
-
-#show raw: it => [
-  #set text(size: 0.5em)
-  #it
-]
-#raw(read("bin2xml.py"), lang: "python")
-
-
-= Aside: Common Workflows
-== Common Workflows
-Compare with Common Workflows (all implemented in AiiDA https://doi.org/10.1038/s41524-021-00594-6, but can change code -- maybe talk with Marnik about this and the advantages/limitations. Are people writing any common workflows or is everything still code-dependent? No -- for anything complicated you need code-specific logic)
-
-In an ideal world:
-- workflows with very prescribed inputs and outputs
-- workflows that are engine-agnostic (we should not have to rewrite how to calculate binding energy curves, defect energies etc again and again -- nor should this knowledge exclusive to AiiDA)
-- should make concatenating workflows straightforward
-- workflow manages such as AiiDA can read and run .cwl files
-
-The alternative: siloed communities where we only write AiiDA -- that is valid, but we need to simplify, we need to educate, we need to commit (and not push people away from it)
-
-Where we call down
-- everyone wants bespoke
-
-==
-Test#footnote("This is a footnote")
-
-= Introduction
-
-== Subsection
-
-#par(justify: true)[#lorem(200)]
-
-#focus-slide()[Here is a focus slide presenting a key idea]
-
-#matrix-slide()[
-  This is a matrix slide
-][
-  You can use it to present information side-by-side
-][
-  with an arbitrary number of rows and columns
-]
-
-== Test
-More text appears under the same subsection title as earlier
-
-But a new subsection starts a new page.
-
-Now, let's cite a nice paper.@Linscott2023
+// 
+// = So where does that leave koopmans?
+// == Rewriting `koopmans`
+// `koopmans` is slowly being refactored into "CWL-inspired" Python
+// 
+// #show raw: it => [
+//   #set text(size: 0.5em)
+//   #it
+// ]
+// #raw(read("bin2xml.py"), lang: "python")
+// 
+// == An example composite workflow
+// 
+// #raw(read("kcw_then_w90.py"), lang: "python")
+// 
+// = Aside: Common Workflows
+// == Common Workflows
+// Compare with Common Workflows (all implemented in AiiDA https://doi.org/10.1038/s41524-021-00594-6, but can change code -- maybe talk with Marnik about this and the advantages/limitations. Are people writing any common workflows or is everything still code-dependent? No -- for anything complicated you need code-specific logic)
+// 
+// = Conclusions
+// == 
+// In an ideal world:
+// - workflows with very prescribed inputs and outputs
+// - workflows that are engine-agnostic (we should not have to rewrite how to calculate binding energy curves, defect energies etc again and again -- nor should this knowledge exclusive to AiiDA)
+// - should make concatenating workflows straightforward
+// - workflow manages such as AiiDA can read and run .cwl files
+// 
+// The alternative: siloed communities where we only write AiiDA -- that is valid, but we need to simplify, we need to educate, we need to commit (and not push people away from it)
+// 
+// Where we call down
+// - everyone wants bespoke
 
 == References
 

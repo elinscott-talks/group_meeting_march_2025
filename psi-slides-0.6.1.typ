@@ -44,43 +44,27 @@
   }
 }
 
-#let default-header(self, black-logo: true) = {
+#let default-header(self, black-logo: true, display-header-text: true) = {
   set std.align(top)
   let logo-image = "media/logos/psi_black.png"
   if not black-logo {
     logo-image = "media/logos/psi_white.png"
   }
 
-  let title-content = []
-  if self.store.header != none {
-    title-content = align(
-        top + left,
-        text(
-          fill: self.colors.primary,
-          weight: "bold",
-          size: 1.1cm,
-          self.store.header,
-        ),
-      )
-  }
-  grid(
+  if display-header-text {
+    grid(
       columns: (5fr, 2fr),
       align: (left + horizon, right + horizon),
       inset: 1em,
-      title-content,
-      align(top + right, image(logo-image, height: 1.1cm)),
+      text(
+        fill: self.colors.primary,
+        weight: "bold",
+        size: 1.1cm,
+        utils.call-or-display(self, self.store.header),
+      ),
+      image(logo-image, height: 1.1cm),
     )
-  // grid(
-  //   columns: (6fr, 1fr),
-
-  //   block(
-  //     inset: (x: .5em),
-  //     components.left-and-right(
-  //       text(fill: self.colors.primary, weight: "bold", size: 1.2em, utils.call-or-display(self, self.store.header)),
-  //       text(fill: self.colors.primary.lighten(65%), utils.call-or-display(self, self.store.header-right)),
-  //     ),
-  //   ),
-  // )
+  }
 }
 
 #let slide(
@@ -219,7 +203,7 @@
 /// - body (auto): is the body of the section. This will be passed automatically by Touying.
 #let new-section-slide(config: (:), level: 1, numbered: true, body) = touying-slide-wrapper(self => {
 
-  let header(self) = default-header(self, black-logo: false)
+  let header(self) = default-header(self, black-logo: false, display-header-text: false)
   let footer(self) = default-footer(self, fill: self.colors.neutral-lightest)
 
   self = utils.merge-dicts(
@@ -341,10 +325,10 @@
   header-right: self => box(utils.display-current-heading(level: 1)) + h(.3em) + self.info.logo,
   footer-columns: (5%, 1fr, 15%),
   footer-a: self => {context utils.slide-counter.display()},
-  footer-b: self => if self.info.short-title == auto {
+  footer-b: self => if self.info.subtitle == none {
     self.info.title
   } else {
-    self.info.short-title
+    self.info.title + ": " + self.info.subtitle
   },
   footer-c: self => {
     self.info.date.display("[day padding:none] [month repr:long] [year]")

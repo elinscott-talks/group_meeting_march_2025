@@ -28,7 +28,7 @@ class Bin2XMLProcess(CommandLineTool):
 
     @property
     def command(self):
-        return Command(executable='bin2xml.x', suffix=f'input.dat output.xml')
+        return Command(executable='bin2xml.x', suffix='input.dat output.xml')
 
     def _set_outputs(self):
         xml_filepointer = File(self, Path("output.xml"))
