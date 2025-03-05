@@ -41,7 +41,7 @@
 // #let (slide, empty-slide, title-slide, new-section-slide, focus-slide, matrix-slide) = utils.slides(s)
 // #show: slides
 
-// #title-slide()
+#title-slide()
 
 == Outline
 What I've learned after 5 years of trying to automate Koopmans functionals
@@ -63,15 +63,16 @@ What I've learned after 5 years of trying to automate Koopmans functionals
 ... but what have I learned throughout this process?
 ]
 
-#focus-slide(background-img: "abe_simposon")[]
+// #focus-slide(background-img: "abe_simposon")[]
 
-Well not quite --- but the intervening years have not been kind -- see permit photos)
+Well not quite, but the intervening years have not been kind!
 
-== Interfacing with AiiDA
+= Interfacing with AiiDA
+== What I needed to do
 
-What I needed to do
 - isolate into steps
 - functional programming
+- what is the best way of writing a workflow?
 
 = Common Workflow Language
 
@@ -108,18 +109,15 @@ What I needed to do
     content((9, 0), "Workflow", name: "w")
     line("w", "p")
   })
+
 ])
 
 == CommandLineTool
-#slide()[
-#show raw: it => [
-  #set text(size: 0.8em)
-  #it
-]
 `echo.cwl`
 
 #raw(read("cwl/hello_world.cwl"), lang: "yaml")
-]
+
+#pagebreak()
   
 == ExpressionTool
 `uppercase.cwl`

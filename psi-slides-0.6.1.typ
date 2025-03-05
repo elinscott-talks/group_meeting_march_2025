@@ -44,28 +44,27 @@
   }
 }
 
-#let default-header(self, black-logo: true, display-header-text: true) = {
-  set std.align(top)
-  let logo-image = "media/logos/psi_black.png"
-  if not black-logo {
-    logo-image = "media/logos/psi_white.png"
-  }
-
-  if display-header-text {
-    grid(
-      columns: (5fr, 2fr),
-      align: (left + horizon, right + horizon),
-      inset: 1em,
-      text(
-        fill: self.colors.primary,
-        weight: "bold",
-        size: 1.1cm,
-        utils.call-or-display(self, self.store.header),
-      ),
-      image(logo-image, height: 1.1cm),
-    )
-  }
-}
+// #let default-header(self, black-logo: true, display-header-text: true) = {
+//   set std.align(top)
+//   if not black-logo {
+//     logo-image = "media/logos/psi_white.png"
+//   }
+// 
+//   if display-header-text {
+//     grid(
+//       columns: (5fr, 2fr),
+//       align: (left + horizon, right + horizon),
+//       inset: 1em,
+//       text(
+//         fill: self.colors.primary,
+//         weight: "bold",
+//         size: 1.1cm,
+//         utils.call-or-display(self, self.store.header),
+//       ),
+//       image("media/logos/psi_black.png", height: 1.1cm),
+//     )
+//   }
+// }
 
 #let slide(
   config: (:),
@@ -78,10 +77,27 @@
   if align != auto {
     self.store.align = align
   }
+
+  let header(self) = {
+    set std.align(top)
+    grid(
+      columns: (5fr, 2fr),
+      align: (left + horizon, right + horizon),
+      inset: 1em,
+      text(
+        fill: self.colors.primary,
+        weight: "bold",
+        size: 1.1cm,
+        utils.call-or-display(self, self.store.header),
+      ),
+      image("media/logos/psi_black.png", height: 1.1cm),
+    )
+  }
+
   let self = utils.merge-dicts(
     self,
     config-page(
-      header: default-header,
+      header: header,
       footer: default-footer,
     ),
   )
@@ -203,7 +219,17 @@
 /// - body (auto): is the body of the section. This will be passed automatically by Touying.
 #let new-section-slide(config: (:), level: 1, numbered: true, body) = touying-slide-wrapper(self => {
 
-  let header(self) = default-header(self, black-logo: false, display-header-text: false)
+
+  let header(self) = {
+    set std.align(top)
+    grid(
+      columns: (1fr),
+      align: (right + horizon),
+      inset: 1em,
+      image("media/logos/psi_white.png", height: 1.1cm),
+    )
+  }
+
   let footer(self) = default-footer(self, fill: self.colors.neutral-lightest)
 
   self = utils.merge-dicts(
@@ -215,7 +241,9 @@
 
   let slide-body = {
     set std.align(horizon + left)
-    text(fill: self.colors.neutral-lightest, weight: "bold", size: 1.5em, utils.display-current-heading(numbered: numbered))
+    stack(
+    text(fill: self.colors.neutral-lightest, weight: "bold", size: 1.5em, utils.display-current-heading(level: level, numbered: numbered))
+    )
     body
   }
   touying-slide(self: self, config: config, slide-body)
