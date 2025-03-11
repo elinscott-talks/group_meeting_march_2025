@@ -6,11 +6,11 @@ requirements:
 
 inputs:
   message: string
-
 outputs:
   out:
     type: string
     outputSource: uppercase/uppercase_message
+
 
 steps:
   echo:

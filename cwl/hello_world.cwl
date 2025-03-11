@@ -1,6 +1,5 @@
 cwlVersion: v1.2
 class: CommandLineTool
-baseCommand: echo
 
 inputs:
   message:
@@ -8,5 +7,6 @@ inputs:
     default: "Hello World"
     inputBinding:
       position: 1
-
 outputs: []
+
+baseCommand: echo

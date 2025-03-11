@@ -2,7 +2,7 @@
 
 // Originally contributed by Pol Dellaiera - https://github.com/drupol
 
-#import "@preview/touying:0.6.1": *
+#import "touying/lib.typ": *
 
 /// Default slide function for the presentation.
 ///
@@ -81,7 +81,7 @@
   let header(self) = {
     set std.align(top)
     grid(
-      columns: (5fr, 2fr),
+      columns: (5fr, 1fr),
       align: (left + horizon, right + horizon),
       inset: 1em,
       text(
@@ -297,13 +297,13 @@
 /// That means that `#matrix-slide[...][...]` stacks horizontally and `#matrix-slide(columns: 1)[...][...]` stacks vertically.
 /// 
 /// - config (dictionary): is the configuration of the slide. Use `config-xxx` to set individual configurations for the slide. To apply multiple configurations, use `utils.merge-dicts` to combine them.
-#let matrix-slide(config: (:), columns: none, rows: none, ..bodies) = touying-slide-wrapper(self => {
+#let matrix-slide(config: (:), columns: none, rows: none, alignment: center + horizon, ..bodies) = touying-slide-wrapper(self => {
   self = utils.merge-dicts(
     self,
     config-common(freeze-slide-counter: true),
     config-page(margin: 0em),
   )
-  touying-slide(self: self, config: config, composer: components.checkerboard.with(columns: columns, rows: rows), ..bodies)
+  touying-slide(self: self, config: config, composer: components.checkerboard.with(columns: columns, rows: rows, alignment: alignment), ..bodies)
 })
 
 
