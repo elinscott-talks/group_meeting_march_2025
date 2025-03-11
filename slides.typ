@@ -103,18 +103,51 @@
   We could really benefit from a lot of these features
 ]
 
+== Goals
+- be able to execute in parallel and remotely with `AiiDA` #pause
+- UI should be as similar as possible #pause
+- old mode of running `koopmans` should still work #pause
+- minimal/no duplication of logic
+
 == Refactoring
-At the `koopmans` end, a lot of "bad" design needed correcting #pause
-- conversion of each step to (almost) pure functions #pause
-- removing all reliance on shared directories #pause
-- abstraction of many operations (e.g. reading/writing files) #pause
+#slide(repeat: 4, self => [
+  #let (uncover, only, alternatives) = utils.methods(self)
+  #set raw(lang: "python", block: true, tab-size: 2)
+  A lot of "bad" design in `koopmans` needed refactoring #pause
+  - abstraction of many operations e.g.
+    #raw(
+      "with open(filename, 'r') as f:
+        data = f.read()"
+      )
+    #pause becomes
+    #raw("self.engine.read(filename)")
+    #pause
+  - ... and, more generally, many responsibilities are moved to the `engine` (reading/writing files, running running calculations, checking the status of calculations, loading pseudopotentials, etc.)
+])
 
-#pause _Note_: this work is not specific to `AiiDA`!
+#slide([
+  - making everything more "pure" #pause e.g. removing all reliance on shared directories #pause
+    #raw(lang: "python", block: true, "calc_nscf.parameters.outdir = calc_scf.parameters.outdir")
 
-#pause At the `AiiDA` end: #pause
+    #pause
+    becomes
+
+    #raw(lang: "python", block: true, "calc_nscf.link(calc_scf.parameters.outdir, 'tmp')")
+    where
+    #raw(lang: "python", block: true, tab-size: 6,
+    "def link(self, src, dst):
+      self.engine.link(src=src, dst=self/dst)
+    ")
+])
+
+
+#focus-slide()[_Note_: none of this refactoring is specific to `AiiDA`!]
+
+== At the `AiiDA` end
+#pause
 - conversion of calculators from `ASE` to `AiiDA` and back #pause
-- `verdi blitz` for simplified AiiDA setup #pause
-- `verdi dump` for dumping AiiDA database to a local file structure
+- `verdi presto` for simplified `AiiDA` setup #pause
+- `verdi dump` for dumping `AiiDA` database to a local file structure
 
 #focus-slide()[Writing workflows well is hard... #pause how can it best be done?]
 
@@ -166,6 +199,8 @@ Every `Process` has `inputs` and `outputs`
 
 #raw(read("cwl/hello_world.cwl"), lang: "yaml")
 
+#pause Called via #raw("$ cwltool echo.cwl", lang: "bash")
+
 #pagebreak()
   
 == `ExpressionTool`
@@ -173,15 +208,25 @@ Every `Process` has `inputs` and `outputs`
 
 #raw(read("cwl/uppercase.cwl"), lang: "yaml")
 
+#pause Called via #raw("$ cwltool uppercase.cwl --message='goes to 11'", lang: "bash")
+
 == `Workflow`
 `echo_uppercase.cwl`
 
 #raw(read("cwl/echo_uppercase.cwl"), lang: "yaml")
 
+#pause Called via #raw("$ cwltool echo_uppercase.cwl input.json", lang: "bash")
+
 == `Operation`
 `p_versus_np.cwl`
 
 #raw(read("cwl/p_versus_np.cwl"), lang: "yaml")
+
+== A less silly `Operation`
+
+`run_pw.cwl`
+
+#raw(read("cwl/run_pw.cwl"), lang: "yaml")
 
 == Pros and Cons
 
@@ -213,6 +258,10 @@ Every `Process` has `inputs` and `outputs`
   #set text(size: 0.5em)
   #it
 ]
+#raw(read("process.py"), lang: "python")
+
+== A simple `CommandLineTool`
+
 #raw(read("bin2xml.py"), lang: "python")
 
 == An example composite workflow
@@ -223,15 +272,15 @@ Every `Process` has `inputs` and `outputs`
   #it
 ]
 
-= And what about `AiiDA`? What does it give us?
+= So what?
 == `koopmans` + `AiiDA`
 
 UI practically unchanged:
 
-  `$ koopmans tio2.json` #pause $arrow.r$ `$ koopmans --engine=aiida tio2.json`
+  `$ koopmans tio2.json` #pause $arrow.r$ `$ koopmans run --engine=aiida tio2.json`
 
 #pause
-but executed *remotely* and in parallel:
+but executed remotely and in parallel:
 
 #align(center, 
   image("figures/aiida-speed-up.svg", width: 90%)
@@ -245,7 +294,7 @@ A lot of the pain in `koopmans` + `AiiDA` derives from wanting to have two workf
 
 #pause
 Can we write runner-agnostic workflows? #pause
-- yes! CWL the most rigorous way, but `koopmans` (kind of) achieves this #pause
+- yes! CWL the most rigorous way#footnote([but still requires schemas, so not truly general]), but `koopmans` (kind of) achieves this #pause
 
 Do we want to write runner-agnostic workflows? #pause
 - probably not... #pause
