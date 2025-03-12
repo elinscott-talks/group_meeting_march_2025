@@ -1,12 +1,10 @@
 class Bin2XMLInput(IOModel):
     binary: File
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
 class Bin2XMLOutput(IOModel):
     xml: File
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
 class Bin2XMLPCommandLineTool(CommandLineTool[Bin2XMLInput, Bin2XMLOutput]):
 
