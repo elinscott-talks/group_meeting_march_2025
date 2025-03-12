@@ -122,7 +122,7 @@
     #pause becomes
     #raw("self.engine.read(filename)")
     #pause
-  - ... and, more generally, many responsibilities are moved to the `engine` (reading/writing files, running running calculations, checking the status of calculations, loading pseudopotentials, etc.)
+  - ... and, more generally, many responsibilities are moved to the `engine` (reading/writing files, running calculations, checking the status of calculations, loading pseudopotentials, etc.)
 ])
 
 #slide([
@@ -310,7 +310,7 @@ What do people want? #pause
 
 What should we do when writing code? #pause
 - always have inputs and outputs rigorously defined -- think functionally! #pause
-- be modular wherever possible #pause
+- be modular wherever possible (e.g. separate responsibilities) #pause
 - be abstract wherever possible #pause
 - make it easy for people to tweak and combine workflows #pause
   - (should `AiiDA` be able to read and dump `.cwl` files?) #pause
