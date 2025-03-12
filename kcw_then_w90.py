@@ -8,7 +8,7 @@ combined_proj_obj = ProjectionBlocks.fromlist([combined_proj_list], ['up'], wf.a
 
 # Find the kcw.x output directory that contains the Hamiltonian to Wannierize
 [kcw_ham_calc] = [c for c in wf.calculations if isinstance(c, KoopmansHamCalculator)]
-kcw_outdir = File(kcw_ham_calc, kcw_ham_calc.parameters.outdir)
+kcw_outdir = kcw_ham_calc.directory / kcw_ham_calc.parameters.outdir
 
 # Construct a Wannierize workflow for the joint occ + empty manifold
 wann_wf = WannierizeBlockWorkflow.from_other(wf,
