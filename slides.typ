@@ -13,8 +13,8 @@
                                 title: [How to write your workflow],
                                 subtitle: [Lessons I learned writing the `koopmans` package],
                                 author: [Edward Linscott],
-                                date: datetime(year: 2025, month: 3, day: 12),
-                                location: [LMS Seminar],
+                                date: datetime(year: 2025, month: 3, day: 25),
+                                location: [THEOS Group Meeting],
                                 references: [references.bib],
                              ))
 
@@ -297,7 +297,7 @@ Can we write runner-agnostic workflows? #pause
 - yes! CWL the most rigorous way#footnote([but still requires schemas, so not truly general]), but `koopmans` (kind of) achieves this #pause
 
 Do we want to write runner-agnostic workflows? #pause
-- probably not... #pause
+- probably not (some community efforts in their infancy e.g. MADICES) #pause
 
 (_cf._ Do we want to write calculator-agnostic workflows?
 - yes! See Common Workflows @Huber2021)

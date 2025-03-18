@@ -1,6 +1,6 @@
 # Read and run the Koopmans workflow
 wf = read('si.json')
-wf.run_while()
+wf.run()
 
 # Merge the separate occ + emp projections into a set of projections that combines occ + empty
 combined_proj_list = [p for block in wf.projections for p in block.projections]
@@ -20,4 +20,4 @@ wann_wf.calculator_parameters['pw2wannier'].prefix = 'kc_kcw'
 wann_wf.directory /= '02-joint-wannierize'
 
 # Run the Wannierization
-wann_wf.run_while()
+wann_wf.run()
