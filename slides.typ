@@ -13,7 +13,7 @@
                                 title: [How to write your workflow],
                                 subtitle: [Lessons I learned writing the `koopmans` package],
                                 author: [Edward Linscott],
-                                date: datetime(year: 2025, month: 3, day: 25),
+                                date: datetime(year: 2025, month: 4, day: 2),
                                 location: [THEOS Group Meeting],
                                 references: [references.bib],
                              ))
@@ -60,7 +60,7 @@
 ]
 
 #focus-slide()[
-... but what have I learned throughout this process?
+... what have I learned throughout this process?
 ]
 
 #slide(config: config-page(margin: 0em),)[
@@ -87,7 +87,7 @@
 
 #matrix-slide(alignment: top)[
   #image("media/logos/koopmans_grey_on_transparent.svg", height: 2em)
-  Simple by design #pause
+  Simplistic by design #pause
   - local execution only #pause
   - serial step execution (even when steps are independent!) #pause
   - direct access to input/output files #pause
@@ -159,7 +159,7 @@
 
 #pause
 - "an open standard for describing how to run command line tools and connect them to create workflows" #pause
-- separate `runners` are required to execute the workflows; a CWL workflow only contains the logic of the workflows #pause
+- a CWL workflow only contains the logic of the workflows: separate `runners` are required to execute the workflows #pause
 - introduced in 2014; version 1.2 released in 2020 #pause
 - mostly used by bioinformatics community
 
@@ -294,15 +294,15 @@ A lot of the pain in `koopmans` + `AiiDA` derives from wanting to have two workf
 
 #pause
 Can we write runner-agnostic workflows? #pause
-- yes! CWL the most rigorous way#footnote([but still requires schemas, so not truly general]), but `koopmans` (kind of) achieves this #pause
+- yes! CWL is one rigorous way#footnote([but still requires schemas, so not truly general]), but `koopmans` (kind of) achieves this #pause
 
 Do we want to write runner-agnostic workflows? #pause
-- probably not (some community efforts in their infancy e.g. MADICES) #pause
+- not yet (some community efforts in their infancy e.g. MADICES) #pause
 
 (_cf._ Do we want to write calculator-agnostic workflows?
 - yes! See Common Workflows @Huber2021)
 
-== If not, what should we do?
+== In the meantime, what should we do?
 What do people want? #pause
 - quick to write #pause
 - understandable #pause
